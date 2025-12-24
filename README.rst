@@ -45,20 +45,21 @@ This implementation uses the **RadioML 2018.01A** dataset, which is publicly ava
 Please download the dataset separately and place it in the following directory
 structure:
 
+
 ::
 
     data/
     └── RadioML2018/
-        ├── X.npy
-        ├── Y.npy
-        └── snr.npy
+        ├── GOLD_XYZ_OSC.0001_1024.hdf5
+        └── classes-fixed.json
+
 
 No dataset files are included in this repository.
 
 Environment Setup
 -----------------
 
-The code is implemented in **Python** and uses **PyTorch**.
+The code is implemented in **Python** and uses **TensorFlow / Keras**
 
 Install the required dependencies using:
 
