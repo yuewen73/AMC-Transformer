@@ -55,13 +55,15 @@ class RadioML18Dataset(Dataset):
     def __init__(self, data_dir, mode="train", seed=42):
         h5_path = os.path.join(data_dir, "GOLD_XYZ_OSC.0001_1024.hdf5")
         cls_path = os.path.join(data_dir, "classes-fixed.json")
-
-        h5 = h5py.File(h5_path, "r")
-        classes = json.load(open(cls_path))
-
-        X = h5["X"]
-        Y = np.argmax(h5["Y"], axis=1)
-        Z = h5["Z"][:, 0]
+        
+        with h5py.File(h5_path, "r") as h5:
+            X = h5["X"][:]
+            Y = np.argmax(h5["Y"][:], axis=1)
+            Z = h5["Z"][:, 0]
+        
+        with open(cls_path, "r") as f:
+            classes = json.load(f)
+        
 
         self.target_modulations = classes
         self.target_snrs = np.unique(Z)
