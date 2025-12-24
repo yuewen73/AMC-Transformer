@@ -26,13 +26,11 @@ Repository Structure
 ::
 
     AMC-Transformer/
-    ├── model.py              # AMC-Transformer model definition
-    ├── dataset.py            # RadioML dataset loading and preprocessing
+    ├── model.py              # AMC-Transformer (ViT-based) model definition
+    ├── dataset.py            # RadioML 2018.01A dataset loading and preprocessing
     ├── train.py              # Training and evaluation entry point
     ├── requirements.txt      # Python dependencies
-    ├── configs/
-        └── reproduce.yaml    # Representative configuration used in the paper
-
+    └── README.rst
 
 Dataset
 -------
@@ -45,7 +43,6 @@ This implementation uses the **RadioML 2018.01A** dataset, which is publicly ava
 Please download the dataset separately and place it in the following directory
 structure:
 
-
 ::
 
     data/
@@ -53,13 +50,14 @@ structure:
         ├── GOLD_XYZ_OSC.0001_1024.hdf5
         └── classes-fixed.json
 
-
 No dataset files are included in this repository.
 
 Environment Setup
 -----------------
 
-The code is implemented in **Python** and uses **TensorFlow / Keras**
+The code is implemented in **Python** and uses **TensorFlow / Keras** for model
+training and evaluation.  
+Some auxiliary components (e.g., dataset handling) rely on PyTorch utilities.
 
 Install the required dependencies using:
 
@@ -67,10 +65,25 @@ Install the required dependencies using:
 
     pip install -r requirements.txt
 
+The ``requirements.txt`` specifies the following minimum versions:
+
+::
+
+    numpy>=2.0.2
+    pandas>=2.2.2
+    tensorflow>=2.19.0
+    h5py>=3.14.0
+    scikit-learn>=1.6.1
+    matplotlib>=3.10.0
+    seaborn>=0.13.2
+    torch>=2.8.0+cu126
+    tqdm>=4.67.1
+
 The experiments were tested with:
 
 - Python >= 3.8
-- PyTorch >= 1.10
+- TensorFlow >= 2.19
+- NVIDIA GPU (optional, CPU execution is supported for reduced-scale runs)
 
 Reproducibility
 ---------------
@@ -87,38 +100,33 @@ To reproduce a **representative experiment** reported in the paper
         --layers 10 \
         --heads 8
 
-This configuration corresponds to the representative results discussed in the paper
-and demonstrates the performance–complexity trade-off of the proposed AMC-Transformer
-model.
+This command trains a Transformer model with 10 attention layers and 8 heads and
+reports the classification accuracy on the test set.
 
-Due to computational constraints, the repository focuses on **representative runs**
-rather than exhaustive hyperparameter sweeps.
+For faster execution on a standard laptop or CPU-only environment, the following
+optional arguments can be used:
+
+::
+
+    --max_samples 5000
+    --epochs 20
+
+These options limit the number of training samples and reduce training time while
+preserving the overall performance trend discussed in the paper.
+
+Due to computational constraints, this repository focuses on **representative runs**
+rather than exhaustive hyperparameter sweeps or full multi-seed evaluations.
 
 Notes
 -----
 
 - The provided code is intended for **academic and research use only**.
-- Notebooks are included for exploratory analysis and visualization, but all
-  reproducible experiments should be executed via ``train.py``.
+- All reproducible experiments should be executed via ``train.py``.
 - Results may vary slightly depending on hardware, software versions, and random seeds.
 
-Citation
---------
-
-If you use this code in your research, please cite the corresponding paper:
-
-::
-
-    @article{AMCTransformer2025,
-      title   = {AMC-Transformer: Automatic Modulation Classification based on Enhanced Attention Model},
-      author  = {Xu, Yuewen and others},
-      journal = {Infocommunications Journal},
-      year    = {2025}
-    }
 
 License
 -------
 
 This project is released for **research and educational purposes**.
 Please contact the authors for other usage scenarios.
-
