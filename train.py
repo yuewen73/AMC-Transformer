@@ -38,7 +38,8 @@ def main(args):
         train_ds.X, train_ds.Y = train_ds.X[train_mask], train_ds.Y[train_mask]
         valid_ds.X, valid_ds.Y = valid_ds.X[valid_mask], valid_ds.Y[valid_mask]
         test_ds.X,  test_ds.Y  = test_ds.X[test_mask],  test_ds.Y[test_mask]
-
+        if valid_ds.X.shape[0] == 0:
+            raise ValueError(f"No samples found for SNR={args.snr}")
     # Optional: subsample for speed
     if args.max_samples > 0:
         train_ds.X = train_ds.X[:args.max_samples]
